@@ -1,18 +1,29 @@
 from django.http import HttpResponse
+from django.shortcuts import redirect
 import random
 
 Correct_login = "Deerpa"
 Correct_password = "1234"
 
+login = ""
+password = ""
+
 
 def index(request):
-    login = request.POST.get("username", None)
-    password = request.POST.get("password", None)
+    if request.method == "POST":
+        global login
+        global password
+
+        login = request.POST.get("username", None)
+        password = request.POST.get("password", None)
+        return redirect("/")
 
     if login == Correct_login and password == Correct_password:
-        code = random.random()
-        code = code * 10000
+        code = random.randint(1000, 9999)
         code = int(code)
+
+        login = ""
+        password = ""
 
         return HttpResponse(f"<h1>Код: {code}</h1>")
 
